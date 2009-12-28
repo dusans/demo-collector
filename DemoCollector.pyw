@@ -15,7 +15,7 @@ class Ui_Dialog(QtGui.QDialog):
         dialog.resize(450, 350)
         dialog.setAcceptDrops(False)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("files/DemoCollector.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("files/icons/DemoCollector.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         dialog.setWindowIcon(icon)
         self.demoCountGroupBox = QtGui.QGroupBox(dialog)
         self.demoCountGroupBox.setGeometry(QtCore.QRect(10, 0, 120, 61))
@@ -69,6 +69,13 @@ class Ui_Dialog(QtGui.QDialog):
         self.settings = []
         self.games = []
 
+        # ==== ==== ==== ====
+        # ICONS
+        # ==== ==== ==== ====
+        self.icons = {  "OK": "files/icons/NormalIcon.ico","Error": "files/icons/ModifiedIcon.ico",
+                        "Warning": "files/icons/ConflictIcon.ico", "Add": "files/icons/AddedIcon.ico",
+                        "Ignore": "files/icons/IgnoredIcon.ico", "Delete": "files/icons/DeletedIcon.ico"}
+
     # ==== ==== ==== ====
     # TRANSLATE GUI
     # ==== ==== ==== ====
@@ -82,8 +89,16 @@ class Ui_Dialog(QtGui.QDialog):
         self.currentGameLabel.setText(QtGui.QApplication.translate("dialog", "...", None, QtGui.QApplication.UnicodeUTF8))
 
 
-    def write(self, text):
-        self.outputListWidget.addItem(text)
+    def write(self, text, iconName=None):
+        if iconName == None:
+            self.outputListWidget.addItem(text)
+        else:
+            item = QtGui.QListWidgetItem(text)
+            icon = QtGui.QIcon()
+            icon.addPixmap(QtGui.QPixmap(self.icons[iconName]), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+            item.setIcon(icon)
+            self.outputListWidget.addItem(item)
+
         self.outputListWidget.scrollToBottom()
 
     # ==== ==== ==== ====
@@ -95,16 +110,16 @@ class Ui_Dialog(QtGui.QDialog):
         # ==== ==== ==== ====
         try:
             self.settings = yaml.load(open("files/settings.yml"))
-            self.write("Settings loadet successfully")
+            self.write("Settings loadet successfully", "OK")
         except:
-            self.write("Settings load ERROR. YAML setting file is corrupt!")
+            self.write("Settings load ERROR. YAML setting file is corrupt!", "Error")
             return False
 
         # LOAD GAMES
         self.games = [Game(**setting) for setting in self.settings['games']]
 
         # ==== ==== ==== ====
-        # For all games load demos
+        # All GAMES
         # ==== ==== ==== ====
         gamesNum = 0.0
         allDemosNum = 0
@@ -112,7 +127,6 @@ class Ui_Dialog(QtGui.QDialog):
         for game in self.games:
             # Load game
             gamesNum += 1
-            self.write("Loading game: %s" % game.name)
 
             # Game progress bar
             self.gamesProgressBar.setProperty("value", gamesNum / len(self.games) * 100)
@@ -120,10 +134,9 @@ class Ui_Dialog(QtGui.QDialog):
 
             # Test if game is valid... if all setting are correct
             if not game.test():
-                self.write(" ... game is invalid!!!")
-                #self.outputListWidget.scrollToBottom()
+                self.write("Loading game: %s ... game is invalid!!!" % game.name, "Warning")
             else:
-                self.write(" ... game is valid")
+                self.write("Loading game: %s ... game is valid" % game.name, "OK")
 
 
                 # ==== ==== ==== ====
@@ -132,7 +145,7 @@ class Ui_Dialog(QtGui.QDialog):
                 demoNum = 0.0
 
                 for demo in game.copy():
-                    self.write("     copy demo: %s" % demo.name)
+                    self.write("     copy demo: %s" % demo.name, "Add")
                     demoNum += 1
                     allDemosNum += 1
                     # Game progress bar
