@@ -36,8 +36,8 @@ class Target(object):
 # the setup call at the end of this file. So, I put all the big lists
 # here and I wrap them using the textwrap module.
 
-data_files = [('files', ['D:\\dev\\pyGameDemoCollector\\py\\files\\DemoCollector.ico',
-                         'D:\\dev\\pyGameDemoCollector\\py\\files\\settings.yml'])]
+data_files = [('files', ['files\\settings.yml']),
+			  ('files\\icons', ['files\\icons\\DemoCollector.ico'])]
 
 includes = ['sip']
 excludes = ['_gtkagg', '_tkagg', 'bsddb', 'curses', 'email', 'pywin.debugger',
@@ -46,7 +46,7 @@ excludes = ['_gtkagg', '_tkagg', 'bsddb', 'curses', 'email', 'pywin.debugger',
 packages = []
 dll_excludes = ['libgdk-win32-2.0-0.dll', 'libgobject-2.0-0.dll', 'tcl84.dll',
                 'tk84.dll']
-icon_resources = [(1, 'D:\\dev\\pyGameDemoCollector\\py\\files\\DemoCollector.ico')]
+icon_resources = [(1, 'files\\icons\\DemoCollector.ico')]
 bitmap_resources = []
 other_resources = []
 
@@ -117,7 +117,7 @@ setup(
 # actions.
 
 # No post-compilation code added
-os.popen('"c:\Program Files\WinRAR\Rar.exe" a exe\DemoCollector-build-%s.rar exe\DemoCollector-build-%s' % (version, version))
+os.popen('rar a exe\DemoCollector-build-%s.rar exe\DemoCollector-build-%s' % (version, version))
 
 # And we are done. That's a setup script :-D
 

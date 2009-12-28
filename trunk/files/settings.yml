@@ -3,11 +3,11 @@ games:
  - name: QuakeLive
    demoFolder: c:/Documents and Settings/Dule/Application Data/id Software/quakelive/home/baseq3/demos/
    screenShotFolder: c:/Documents and Settings/Dule/Application Data/id Software/quakelive/home/baseq3/screenshots/
-   outputFolder: d:/dev/pyGameDemoCollector/output/
+   outputFolder: d:/dev/DemoCollector/output/
    gameDemoExt: dm_73
 
  - name: Quake34
    demoFolder: c:/Quake5/cpma/demos/
    screenShotFolder: c:/Quake5/cpma/screenshots/
-   outputFolder: d:/dev/pyGameDemoCollector/output/quake5
+   outputFolder: d:/dev/DemoCollector/output/quake5
    gameDemoExt: dm_1337
