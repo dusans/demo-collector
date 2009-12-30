@@ -1,0 +1,5 @@
+#summary base documentation
+
+= Documentation =
+
+Documentation of demo collector
