@@ -1,4 +1,3 @@
-=== Extra setting ===
 For these u need to know what [http://en.wikipedia.org/wiki/Regular_expression Regular_expressions] are <br/><br/>
 *nameShorteners:* Using regular expression u can shorten demo output name (read docs)
 
