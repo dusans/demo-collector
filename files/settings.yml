@@ -1,13 +1,38 @@
 # Indentation does matter. Use the same amount of spaces ;) just use copy paste ;)
 games:
  - name: QuakeLive
-   demoFolder: c:/Documents and Settings/Dule/Application Data/id Software/quakelive/home/baseq3/demos/
+   demoFolder: c:/Documents and Settings/Dule\Application Data/id Software/quakelive/home/baseq3/demos/
    screenShotFolder: c:/Documents and Settings/Dule/Application Data/id Software/quakelive/home/baseq3/screenshots/
-   outputFolder: d:/dev/DemoCollector/output/
+   outputFolder: d:/dev/DemoCollector\output/None
+   gameDemoExt: dm_73 
+   
+ - name: Warsow
+   demoFolder: c:\Documents and Settings\Dule\Application Data\Warsow 0.5\basewsw\demos\autorecord\
+   screenShotFolder: c:\Documents and Settings\Dule\Application Data\Warsow 0.5\basewsw\screenshots\
+   outputFolder: d:/dev/DemoCollector/output
+   gameDemoExt: wd11
+   
+ - name: QuakeLiveAdvance
+   demoFolder: c:/Documents and Settings/Dule\Application Data/id Software/quakelive/home/baseq3/demos/
+   screenShotFolder: c:/Documents and Settings/Dule/Application Data/id Software/quakelive/home/baseq3/screenshots/
+   outputFolder: d:/dev/DemoCollector\output
    gameDemoExt: dm_73
+   # Advance settings [extra]... dont even bother if u dont feel like
+   #  shorten the output demo name using regular expression...
+   nameShorteners: 
+     remove end date: \-\d{4}_\d{2}_\d{2}\-\d{2}_\d{2}_\d{2}
+     remove clan tag: qpd
+   #  put the demo into subdirectory based on its name... using regular expression
+   grouper:
+    - /:
+        v: .*
+        c:
+          TDM:
+            v: ^TDM
+            c: 
+              xgo:
+                v: xgo
+          CTF:
+            v: ^CTF
 
- - name: Quake34
-   demoFolder: c:/Quake5/cpma/demos/
-   screenShotFolder: c:/Quake5/cpma/screenshots/
-   outputFolder: d:/dev/DemoCollector/output/quake5
-   gameDemoExt: dm_1337
+

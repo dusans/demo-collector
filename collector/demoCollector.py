@@ -31,13 +31,15 @@ class ScreenShot:
     def __str__(self):
         return "<ScreenShot: name: %s, date: %s>" % (self.name, self.date)
 
-class Game():
-    def __init__(self, name, demoFolder, screenShotFolder, outputFolder, gameDemoExt):
+class Game:
+    def __init__(self, name, demoFolder, screenShotFolder, outputFolder, gameDemoExt, nameShorteners=[], grouper=[""]):
         self.name = name
         self.demoFolder = demoFolder
         self.screenShotFolder = screenShotFolder
         self.outputFolder = outputFolder
         self.gameDemoExt = gameDemoExt
+        self.nameShorteners = nameShorteners
+        self.grouper = grouper
         #self SET
         self.countFile = "%s/%s" % (outputFolder, "demoIndex.count")
         self.lastCopyDateFile = "%s/%s" % (demoFolder, "lastCopy.date")
@@ -80,9 +82,20 @@ class Game():
     def getScreenShots(self):
         self.screenShots = [ScreenShot("%s/%s" % (self.screenShotFolder, s)) for s in os.listdir(self.screenShotFolder)]
 
+    def getFiles(self, directory, ext):
+        for directory in os.walk(directory):
+            for f in directory[2]:
+                if f.endswith(ext):
+                    yield "%s/%s" % (directory[0], f)
+
     def getDemos(self):
-        demos = [d for d in os.listdir(self.demoFolder) if d.endswith(self.gameDemoExt)]
-        demos = [Demo("%s/%s" % (self.demoFolder, d), self.screenShots) for d in demos]
+        demos = [Demo(f, self.screenShots) for f in self.getFiles(self.demoFolder, self.gameDemoExt)]
+##        for directory in os.walk(self.demoFolder):
+##            for f in directory[2]:
+##                if f.endswith(self.gameDemoExt):
+##                    demos.append(Demo("%s/%s" % (directory, f), self.screenShots))
+##                print "\t", f
+
         self.demos = [d for d in demos if d.endDate > self.lastCopyDate]
 
     def setCounterAndDate(self):
@@ -97,40 +110,68 @@ class Game():
             self.getScreenShots()
             self.getDemos()
 
+    def group(self, grouper, name):
+        #print grouper, name
+        if grouper != None:
+            for folder in grouper:
+                if re.search(grouper[folder].get('v', 'xgoOwnsU'), name):
+                    #print "Match", grouper[folder]['v']
+                    return folder + "/" + self.group(grouper[folder].get('c'), name)
+        return ""
+
     def copy(self):
         for d in self.demos:
             if d.hasShots():
-                #print "Copy %s" % d
                 deltas = []
+                name = d.name.replace("__", "_")
+                # GROUP, SORT DEMO INTO FOLDER
+                groupDir = self.group(self.grouper[0], name)
+                try:
+                    groupPath = "%s/%s" % (self.outputFolder, groupDir)
+                    if not os.path.exists(groupPath):
+                        os.makedirs(groupPath)
+                except:
+                    groupDir = ""
+                    print "Error at makedirs... dir maybe already exists"
+
+                # SHORT DEMO NAME, BASSED ON REGEX IN nameShorteners
+                if len(self.nameShorteners) > 0:
+                    for r in self.nameShorteners.values():
+                        name = re.sub(r, "", name)
                 # Copy screenShots
                 for s in d.screenShots:
                     #print "Copy", s
                     delta = s.date - d.startDate
                     delta = datetime.time(minute=int(delta/60), second=int(delta%60))
-                    shutil.copyfile(s.path, "%s/%s-%s__%s__.%s" % (self.outputFolder, self.counter, d.name, delta.strftime("%M.%S"), s.ext))
+                    shutil.copyfile(s.path, "%s/%s/%s-%s__%s__.%s" % (self.outputFolder, groupDir, self.counter, name, delta.strftime("%M.%S"), s.ext))
                     deltas.append(delta.strftime("%M.%S"))
                 # Copy demo
                 yield d
-                shutil.copyfile(d.path, "%s/%s-%s__%s__.%s" % (self.outputFolder, self.counter, d.name, "_".join(deltas), d.ext))
+                shutil.copyfile(d.path, "%s/%s/%s-%s__%s__.%s" % (self.outputFolder, groupDir, self.counter, name, "_".join(deltas), d.ext))
                 self.counter += 1
         # After copy set counter and date files
         self.setCounterAndDate()
 
-
 #-------------------------------------------------------------------------------
 # TEST
 #-------------------------------------------------------------------------------
-##name = "quakelive"
-##demoFolder = "c:/Documents and Settings/Dule/Application Data/id Software/quakelive/home/baseq3/demos/"
-##screenShotFolder = "c:/Documents and Settings/Dule/Application Data/id Software/quakelive/home/baseq3/screenshots/"
-##outputFolder = "d:/dev/pyGameDemoCollector/output/"
-##gameDemoExt = "dm_73"
+##import yaml
+##settings = yaml.load(open("../files/settings.yml"))
+##games = [Game(**setting) for setting in settings['games']]
 ##
-##quakelive = Game(name, demoFolder, screenShotFolder, outputFolder, gameDemoExt)
+##grouper = settings['games'][0]['grouper'][0]
+####[('root', '.*', [('TDM', '$TDM')])]
+####{'root': '.*', 'childs':{'TDM': '/TDM'}}
+####for d in quakelive.copy():
+####    print d
+####    for p in d.screenShots:
+####            print "\t", p
 ##
-##
-##for d in quakelive.copy():
-##    print d
-##    for p in d.screenShots:
-##            print "\t", p
-
+##def group(grouper, name):
+##    #print grouper, name
+##    if grouper != None:
+##        for folder in grouper:
+##            if re.search(grouper[folder]['v'], name):
+##                #print "Match", grouper[folder]['v']
+##                return folder + "/" + group(grouper[folder]['c'], name)
+##    return ""
