@@ -1,9 +1,9 @@
 * Quake Live
 {{{
  - name: QuakeLive
-   demoFolder: c:/Documents and Settings/Dule\Application Data/id Software/quakelive/home/baseq3/demos/
-   screenShotFolder: c:/Documents and Settings/Dule/Application Data/id Software/quakelive/home/baseq3/screenshots/
-   outputFolder: d:/dev/DemoCollector\output/None
+   demoFolder: c:/Documents and Settings/User/Application Data/id Software/quakelive/home/baseq3/demos/
+   screenShotFolder: c:/Documents and Settings/User/Application Data/id Software/quakelive/home/baseq3/screenshots/
+   outputFolder: d:/dev/DemoCollector/output/QuakeLive
    gameDemoExt: dm_73 
 }}}
 
@@ -12,15 +12,15 @@
  - name: Quake3
    demoFolder: c:/Games/Q3/baseq3/demos/
    screenShotFolder: c:/Games/Q3/baseq3/screenshots/
-   outputFolder: d:/DemoCollector\output/q3
+   outputFolder: d:/DemoCollector/output/q3
    gameDemoExt: dm_68
 }}}
 
 * Warsow
 {{{
  - name: Warsow
-   demoFolder: c:\Documents and Settings\Dule\Application Data\Warsow 0.5\basewsw\demos\autorecord\
-   screenShotFolder: c:\Documents and Settings\Dule\Application Data\Warsow 0.5\basewsw\screenshots\
-   outputFolder: d:/dev/DemoCollector/output
+   demoFolder: c:\Warsow\basewsw\demos\autorecord\
+   screenShotFolder: c:\Warsow\basewsw\screenshots\
+   outputFolder: d:/dev/DemoCollector/output/wsw
    gameDemoExt: wd11
 }}}
