@@ -1,11 +1,10 @@
 = Documentation of demo collector =
 
-...
-
 = Settings =
-*settings.yml* is a [YAML] file. That means that indentation does matter. Use the same amount of spaces ;) just use copy paste ;)
+*settings.yml* is a [http://en.wikipedia.org/wiki/YAML YAML] file. That means that indentation does matter. Use the same amount of spaces ;) just use copy paste ;)
 
-=== These setting are needed ===
+== Basic settings ==
+*These setting are needed*
 
 *name:* Just name your game what ever u want. *Like:* _QuakeLive_<br/> 
 *demoFolder:* folder where your demos are *Like:* _c:/quakelive/home/baseq3/demos/_<br/> 
@@ -23,7 +22,4 @@ games:
    gameDemoExt: dm_73 
 }}}
 
-<br/> <br/> <br/> <br/> 
-
-
-[ExtraSetting]
+==[ExtraSetting]==
