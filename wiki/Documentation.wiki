@@ -1,8 +1,6 @@
-#summary base documentation
-
 = Documentation of demo collector =
 
-Documentation of demo collector...
+...
 
 = Settings =
 settings.yml is a YAML file. That means that indentation does matter. Use the same amount of spaces ;) just use copy paste ;)
