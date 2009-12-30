@@ -1,0 +1,4 @@
+*build-20:*
+ * Add: recursive demo search. Needet for warsow support
+ * Add: demo name shortener. Using regular expression u can shorten demo output name (read docs)
+ * Add: group demos into subdirectories: Using regular expression u can based on the demo name group(sort) demos into subdirectories (read docs)
