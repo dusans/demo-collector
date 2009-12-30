@@ -15,8 +15,8 @@ settings.yml is a YAML file. That means that indentation does matter. Use the sa
 *outputFolder:* folder where your want to put your demos in *Like:*_d:/DemoCollector\output/None_<br/> 
 *gameDemoExt:* the file extensions of your demo files *Like:* _dm_73_<br/> 
 
-== Extra setting ===
-For these u need to know what [http://en.wikipedia.org/wiki/Regular_expression Regular_expression] are <br/>
+=== Extra setting ===
+For these u need to know what [http://en.wikipedia.org/wiki/Regular_expression Regular_expressions] are <br/><br/>
 *nameShorteners:* Using regular expression u can shorten demo output name (read docs)
 
 Example on this demo: *CA-qpdxgo-qzdm6-2009_12_23-13_52_42.dm_73*:
@@ -24,4 +24,31 @@ Example on this demo: *CA-qpdxgo-qzdm6-2009_12_23-13_52_42.dm_73*:
    nameShorteners: 
      remove end date: \-\d{4}_\d{2}_\d{2}\-\d{2}_\d{2}_\d{2}
      remove clan tag: qpd
+}}}
+
+It will loop thru all Shorteners:
+ * remove end date
+ this regex: *\-\d{4}_\d{2}_\d{2}\-\d{2}_\d{2}_\d{2}* <br/>
+ will match *-2009_12_23-13_52_42* <br/>
+ and will produce: *CA-qpdxgo-qzdm6.dm_73*
+ * remove clan tag
+ this regex: *qpd* <br/>
+ will match *qpd* <br/>
+ and will produce: *CA-xgo-qzdm6.dm_73*
+
+*grouper:*  group demos into subdirectories: Using regular expression u can based on the demo name group(sort) demos into subdirectories 
+
+Example on this demo: *TDM-xgo-qzdm7-2009_12_29-14_42_55.dm_73*:
+{{{
+   grouper:
+    - /:
+        v: .*
+        c:
+          TDM:
+            v: ^TDM
+            c: 
+              xgo:
+                v: xgo
+          CTF:
+            v: ^CTF
 }}}
