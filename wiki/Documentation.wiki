@@ -1,5 +1,27 @@
 #summary base documentation
 
-= Documentation =
+= Documentation of demo collector =
 
-Documentation of demo collector
+Documentation of demo collector...
+
+= Settings =
+settings.yml is a YAML file. That means that indentation does matter. Use the same amount of spaces ;) just use copy paste ;)
+
+=== These setting are needed ===
+
+*name:* Just name your game what ever u want. *Like:* _QuakeLive_<br/> 
+*demoFolder:* folder where your demos are *Like:* _c:/quakelive/home/baseq3/demos/_<br/> 
+*screenShotFolder:* folder where your screenshots are *Like:* _c:/quakelive/home/baseq3/screenshots/_<br/> 
+*outputFolder:* folder where your want to put your demos in *Like:*_d:/DemoCollector\output/None_<br/> 
+*gameDemoExt:* the file extensions of your demo files *Like:* _dm_73_<br/> 
+
+== Extra setting ===
+For these u need to know what [http://en.wikipedia.org/wiki/Regular_expression Regular_expression] are <br/>
+*nameShorteners:* Using regular expression u can shorten demo output name (read docs)
+
+Example on this demo: *CA-qpdxgo-qzdm6-2009_12_23-13_52_42.dm_73*:
+{{{
+   nameShorteners: 
+     remove end date: \-\d{4}_\d{2}_\d{2}\-\d{2}_\d{2}_\d{2}
+     remove clan tag: qpd
+}}}
