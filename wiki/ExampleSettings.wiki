@@ -1,9 +1,18 @@
+* QuakeWorld
+{{{
+ - name: QuakeWorld
+   demoFolder: d:\nQuake\qw\demos\
+   screenShotFolder: d:\nQuake\qw\screenshots\
+   outputFolder: d:/DemoCollector/output
+   gameDemoExt: qwd
+}}}
+
 * Quake Live
 {{{
  - name: QuakeLive
    demoFolder: c:/Documents and Settings/User/Application Data/id Software/quakelive/home/baseq3/demos/
    screenShotFolder: c:/Documents and Settings/User/Application Data/id Software/quakelive/home/baseq3/screenshots/
-   outputFolder: d:/dev/DemoCollector/output/QuakeLive
+   outputFolder: d:/DemoCollector/output/QuakeLive
    gameDemoExt: dm_73 
 }}}
 
@@ -21,6 +30,6 @@
  - name: Warsow
    demoFolder: c:\Warsow\basewsw\demos\autorecord\
    screenShotFolder: c:\Warsow\basewsw\screenshots\
-   outputFolder: d:/dev/DemoCollector/output/wsw
+   outputFolder: d:/DemoCollector/output/wsw
    gameDemoExt: wd11
 }}}
