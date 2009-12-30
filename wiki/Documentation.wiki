@@ -3,7 +3,7 @@
 ...
 
 = Settings =
-settings.yml is a YAML file. That means that indentation does matter. Use the same amount of spaces ;) just use copy paste ;)
+*settings.yml* is a [YAML] file. That means that indentation does matter. Use the same amount of spaces ;) just use copy paste ;)
 
 === These setting are needed ===
 
