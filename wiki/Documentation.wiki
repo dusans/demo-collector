@@ -22,4 +22,6 @@ games:
    gameDemoExt: dm_73 
 }}}
 
+[ExampleSettings Other example settings]
+
 ==[ExtraSetting]==
