@@ -1,0 +1,80 @@
+=== Extra setting ===
+For these u need to know what [http://en.wikipedia.org/wiki/Regular_expression Regular_expressions] are <br/><br/>
+*nameShorteners:* Using regular expression u can shorten demo output name (read docs)
+
+Example on this demo: *CA-qpdxgo-qzdm6-2009_12_23-13_52_42.dm_73*:
+{{{
+   nameShorteners: 
+     remove end date: \-\d{4}_\d{2}_\d{2}\-\d{2}_\d{2}_\d{2}
+     remove clan tag: qpd
+}}}
+
+It will loop thru all Shorteners:
+ * remove end date
+ this regex: *\-\d{4}_\d{2}_\d{2}\-\d{2}_\d{2}_\d{2}* <br/>
+ will match *-2009_12_23-13_52_42* <br/>
+ and will produce: *CA-qpdxgo-qzdm6.dm_73*
+ * remove clan tag
+ this regex: *qpd* <br/>
+ will match *qpd* <br/>
+ and will produce: *CA-xgo-qzdm6.dm_73*
+
+*grouper:*  group demos into subdirectories: Using regular expression u can based on the demo name group(sort) demos into subdirectories 
+
+The definition is: 
+{{{
+   grouper:
+    - / [folder]:
+        v [value]: .* [is a regular expression, the collector will try to match it. if it does match it will go on depper down the structure... into its childs]
+        c [childs]: [child elements of this element]
+
+}}}
+
+grouper is recursively defined. So u create a "directory" structure into which demo will fall into. <br/>
+
+Example on this demo: *TDM-xgo-qzdm7-2009_12_29-14_42_55.dm_73*:
+{{{
+   grouper:
+    - /:
+        v: .*
+        c:
+          TDM:
+            v: ^TDM
+            c: 
+              xgo:
+                v: xgo
+          CTF:
+            v: ^CTF
+}}}
+
+ * First it will go into the root dir:
+{{{
+/:
+}}}
+ it will match the name to its regex value:
+{{{
+v: .*
+}}}
+
+Since .`*` means anything it will match. And since its a match it will go over all its childs trying to find a deeper match:
+
+It will try:
+{{{
+          TDM:
+            v: ^TDM
+            c: 
+}}}
+
+And since the ^TDM means if the demo starts with TDM the demo *TDM-xgo-qzdm7-2009_12_29-14_42_55.dm_73* will match and it will try its childs...
+
+{{{
+              xgo:
+                v: xgo
+}}}
+
+This one also matches cuz v: xgo means does the name contain the text xgo... it does..
+
+So the demo *TDM-xgo-qzdm7-2009_12_29-14_42_55.dm_73* will be put into a subdirectory:
+{{{
+/TDM/xgo
+}}}
