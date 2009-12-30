@@ -15,6 +15,16 @@ settings.yml is a YAML file. That means that indentation does matter. Use the sa
 *outputFolder:* folder where your want to put your demos in *Like:*_d:/DemoCollector\output/None_<br/> 
 *gameDemoExt:* the file extensions of your demo files *Like:* _dm_73_<br/> 
 
+Example:
+{{{
+games:
+ - name: QuakeLive
+   demoFolder: c:/quakelive/home/baseq3/demos/
+   screenShotFolder: c:/quakelive/home/baseq3/screenshots/
+   outputFolder: d:/dev/DemoCollector\output/None
+   gameDemoExt: dm_73 
+}}}
+
 === Extra setting ===
 For these u need to know what [http://en.wikipedia.org/wiki/Regular_expression Regular_expressions] are <br/><br/>
 *nameShorteners:* Using regular expression u can shorten demo output name (read docs)
@@ -51,4 +61,15 @@ Example on this demo: *TDM-xgo-qzdm7-2009_12_29-14_42_55.dm_73*:
                 v: xgo
           CTF:
             v: ^CTF
+}}}
+
+grouper is recursively defined. So u create a "directory" structure into which demo will fall into. <br/><br/>
+
+The definition is: 
+{{{
+   grouper:
+    - / [folder]:
+        v [value]: .* [is a regular expression, the collector will try to match it. if it does match it will go on down depper down the structure... into its childs]
+        c [childs]: [child elements of this element]
+
 }}}
