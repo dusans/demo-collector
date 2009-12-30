@@ -15,6 +15,8 @@ class Ui_Dialog(QtGui.QDialog):
         dialog.resize(450, 350)
         dialog.setAcceptDrops(False)
         icon = QtGui.QIcon()
+        #d:/dev/DemoCollector/code/files/icons/DemoCollector.ico
+        #files/icons/DemoCollector.ico
         icon.addPixmap(QtGui.QPixmap("files/icons/DemoCollector.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         dialog.setWindowIcon(icon)
         self.demoCountGroupBox = QtGui.QGroupBox(dialog)
@@ -52,7 +54,7 @@ class Ui_Dialog(QtGui.QDialog):
         self.progressGroupBox.setObjectName("progressGroupBox")
         self.gamesProgressBar = QtGui.QProgressBar(self.progressGroupBox)
         self.gamesProgressBar.setGeometry(QtCore.QRect(10, 40, 291, 16))
-        self.gamesProgressBar.setProperty("value", 24)
+        self.gamesProgressBar.setProperty("value", 0)
         self.gamesProgressBar.setObjectName("gamesProgressBar")
         self.currentGameLabel = QtGui.QLabel(self.progressGroupBox)
         self.currentGameLabel.setGeometry(QtCore.QRect(10, 20, 271, 20))
