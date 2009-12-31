@@ -4,7 +4,10 @@ from PyQt4 import QtCore, QtGui
 import os
 import yaml
 import time
+from subprocess import Popen
 from collector.demoCollector import *
+from yaml.parser import ParserError
+import traceback
 
 class Ui_Dialog(QtGui.QDialog):
     def setupUi(self, Dialog):
@@ -15,8 +18,6 @@ class Ui_Dialog(QtGui.QDialog):
         dialog.resize(450, 350)
         dialog.setAcceptDrops(False)
         icon = QtGui.QIcon()
-        #d:/dev/DemoCollector/code/files/icons/DemoCollector.ico
-        #files/icons/DemoCollector.ico
         icon.addPixmap(QtGui.QPixmap("files/icons/DemoCollector.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         dialog.setWindowIcon(icon)
         self.demoCountGroupBox = QtGui.QGroupBox(dialog)
@@ -64,16 +65,14 @@ class Ui_Dialog(QtGui.QDialog):
         QtCore.QMetaObject.connectSlotsByName(dialog)
 
         # ==== ==== ==== ====
-        # DEFAULT
+        # MY DEFAULT
         # ==== ==== ==== ====
         self.settingsButton.clicked.connect(self.editSettings)
-        self.collectButton.clicked.connect(self.getDemos)
+        self.collectButton.clicked.connect(self.collect)
         self.settings = []
         self.games = []
 
-        # ==== ==== ==== ====
-        # ICONS
-        # ==== ==== ==== ====
+        # ==== ICONS ====
         self.icons = {  "OK": "files/icons/NormalIcon.ico","Error": "files/icons/ModifiedIcon.ico",
                         "Warning": "files/icons/ConflictIcon.ico", "Add": "files/icons/AddedIcon.ico",
                         "Ignore": "files/icons/IgnoredIcon.ico", "Delete": "files/icons/DeletedIcon.ico"}
@@ -90,7 +89,10 @@ class Ui_Dialog(QtGui.QDialog):
         self.progressGroupBox.setTitle(QtGui.QApplication.translate("dialog", "Progress", None, QtGui.QApplication.UnicodeUTF8))
         self.currentGameLabel.setText(QtGui.QApplication.translate("dialog", "...", None, QtGui.QApplication.UnicodeUTF8))
 
-
+    # ==== ==== ==== ====
+    # Write to CONSOLE
+    # using self.icons
+    # ==== ==== ==== ====
     def write(self, text, iconName=None):
         if iconName == None:
             self.outputListWidget.addItem(text)
@@ -104,71 +106,76 @@ class Ui_Dialog(QtGui.QDialog):
         self.outputListWidget.scrollToBottom()
 
     # ==== ==== ==== ====
-    # GET DEMOS
+    # COLLECT
     # ==== ==== ==== ====
-    def getDemos(self):
+    def collect(self):
+        gamesNum = 0.0
+        allDemosNum = 0
         # ==== ==== ==== ====
         # ReLoad SETTINGS
         # ==== ==== ==== ====
         try:
             self.settings = yaml.load(open("files/settings.yml"))
             self.write("Settings loadet successfully", "OK")
-        except:
+        except IOError, e:
+            self.write("Settings file not found! There should be a settings.yml in files directory!", "Error")
+            return False
+        except ParserError, e:
             self.write("Settings load ERROR. YAML setting file is corrupt!", "Error")
+            self.write(str(e), "Warning")
             return False
 
-        # LOAD GAMES
-        self.games = [Game(**setting) for setting in self.settings['games']]
+        # ==== LOAD GAMES ====
+        self.games = []
+        for setting in self.settings['games']:
+            try:
+                self.games.append(Game(**setting))
+            except:
+                self.write("Loading game settings ERROR. Check settings file", "Error")
+                self.write("    error at game: %s" % setting['name'], "Warning")
+
 
         # ==== ==== ==== ====
         # All GAMES
         # ==== ==== ==== ====
-        gamesNum = 0.0
-        allDemosNum = 0
-
         for game in self.games:
-            # Load game
+            # ==== progress bar ====
             gamesNum += 1
-
-            # Game progress bar
             self.gamesProgressBar.setProperty("value", gamesNum / len(self.games) * 100)
             self.currentGameLabel.setText(QtGui.QApplication.translate("Dialog", game.name, None, QtGui.QApplication.UnicodeUTF8))
 
-            # Test if game is valid... if all setting are correct
-            if not game.test():
-                self.write("Loading game: %s ... game is invalid!!!" % game.name, "Warning")
-            else:
+            # ==== Test GAME ====
+            if game.test()[0]:
                 self.write("Loading game: %s ... game is valid" % game.name, "OK")
 
-
                 # ==== ==== ==== ====
-                # Get Demos for Game
+                # GET DEMOS
                 # ==== ==== ==== ====
-                demoNum = 0.0
-
                 for demo in game.copy():
                     self.write("     copy demo: %s" % demo.name, "Add")
-                    demoNum += 1
+                    # Demo Count LCD
                     allDemosNum += 1
-                    # Game progress bar
                     self.lcdDemoNumber.display(allDemosNum)
+            else:
+                self.write("Loading game: %s ... game is invalid!" % game.name, "Warning")
+                self.write("    error: %s" % game.test()[1], "Warning")
+
+
 
     # ==== ==== ==== ====
     # EDIT SETTINGS
     # ==== ==== ==== ====
     def editSettings(self):
         try:
-            os.popen("notepad %s/files/settings.yml" % os.getcwd())
+            Popen(["notepad", "%s/files/settings.yml" % os.getcwd()])
         except:
-            os.popen("vi %s/files/settings.yml" % os.getcwd())
+            Popen(["vi", "%s/files/settings.yml" % os.getcwd()])
 
 # ==== ==== ==== ====
 # MAIN
 # ==== ==== ==== ====
 if __name__ == '__main__':
     import sys
-    print sys.argv
-    print os.getcwd()
     app = QtGui.QApplication(sys.argv)
     dialog = Ui_Dialog()
     dialog.setupUi(dialog)

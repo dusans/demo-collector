@@ -1,7 +1,7 @@
 # Indentation does matter. Use the same amount of spaces ;) just use copy paste ;)
 games:
  - name: QuakeLive
-   demoFolder: c:/Documents and Settings/Dule\Application Data/id Software/quakelive/home/baseq3/demos/
+   demoFolder: c:/Documents and Settings/Dule\Application Data/id Software/quakelive/home/baseq3/demos2/
    screenShotFolder: c:/Documents and Settings/Dule/Application Data/id Software/quakelive/home/baseq3/screenshots/
    outputFolder: d:/dev/DemoCollector\output/None
    gameDemoExt: dm_73 
@@ -11,6 +11,12 @@ games:
    screenShotFolder: c:\Documents and Settings\Dule\Application Data\Warsow 0.5\basewsw\screenshots\
    outputFolder: d:/dev/DemoCollector/output
    gameDemoExt: wd11
+   
+ - name: QuakeWorld
+   demoFolder: d:\Igre\nQuake\qw\demos\
+   screenShotFolder: d:\Igre\nQuake\qw\screenshots\
+   outputFolder: d:/dev/DemoCollector/output
+   gameDemoExt: qwd
    
  - name: QuakeLiveAdvance
    demoFolder: c:/Documents and Settings/Dule\Application Data/id Software/quakelive/home/baseq3/demos/

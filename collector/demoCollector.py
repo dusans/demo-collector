@@ -12,14 +12,14 @@ class Demo:
         self.endDate = os.stat(path).st_mtime
         self.screenShots = self.getScreenShots(screenShots)
 
-    def __str__(self):
-        return "<Demo: name: %s, startDate: %s, endDate: %s>" % (self.name, self.startDate, self.endDate)
-
     def hasShots(self):
         return len(self.screenShots) > 0
 
     def getScreenShots(self, screenShots):
         return [s for s in screenShots if self.startDate < s.date < self.endDate - 15 ]
+
+    def __str__(self):
+        return "<Demo: name: %s, startDate: %s, endDate: %s>" % (self.name, self.startDate, self.endDate)
 
 class ScreenShot:
     def __init__(self, path):
@@ -63,8 +63,8 @@ class Game:
     def test(self):
         for folder in [self.demoFolder, self.screenShotFolder, self.outputFolder]:
             if not os.path.isdir(folder):
-                return False
-        return True
+                return (False, "%s doesnt exist" % folder)
+        return (True, "OK")
 
     #=============== COUNTER ===============
     def getCounter(self):
@@ -79,32 +79,26 @@ class Game:
         if os.path.isfile(self.lastCopyDateFile):
             self.lastCopyDate = os.stat(self.lastCopyDateFile).st_atime
 
-    def getScreenShots(self):
-        self.screenShots = [ScreenShot("%s/%s" % (self.screenShotFolder, s)) for s in os.listdir(self.screenShotFolder)]
-
+    # Recursively get files from a directory with the desired extension
     def getFiles(self, directory, ext):
         for directory in os.walk(directory):
             for f in directory[2]:
                 if f.endswith(ext):
                     yield "%s/%s" % (directory[0], f)
 
+    def getScreenShots(self):
+        self.screenShots = [ScreenShot("%s/%s" % (self.screenShotFolder, s)) for s in os.listdir(self.screenShotFolder)]
+
     def getDemos(self):
         demos = [Demo(f, self.screenShots) for f in self.getFiles(self.demoFolder, self.gameDemoExt)]
-##        for directory in os.walk(self.demoFolder):
-##            for f in directory[2]:
-##                if f.endswith(self.gameDemoExt):
-##                    demos.append(Demo("%s/%s" % (directory, f), self.screenShots))
-##                print "\t", f
-
         self.demos = [d for d in demos if d.endDate > self.lastCopyDate]
 
     def setCounterAndDate(self):
         open(self.countFile, "w").write(str(self.counter))
         open(self.lastCopyDateFile, "w").write(str(datetime.datetime.now()))
 
-
     def setup(self):
-        if self.test():
+        if self.test()[0]:
             self.getLastCopyDate()
             self.getCounter()
             self.getScreenShots()

@@ -1,5 +1,5 @@
 <RCC>
   <qresource prefix="ico" >
-    <file>DemoCollector.ico</file>
+    <file>files/icons/DemoCollector.ico</file>
   </qresource>
 </RCC>
