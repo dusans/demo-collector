@@ -36,8 +36,21 @@ class Target(object):
 # the setup call at the end of this file. So, I put all the big lists
 # here and I wrap them using the textwrap module.
 
+#d:\dev\DemoCollector\code\imageformats\
+
 data_files = [('files', ['files\\settings.yml']),
-			  ('files\\icons', ['files\\icons\\DemoCollector.ico'])]
+
+
+			  ('files\\icons', ['files\\icons\\DemoCollector.ico',
+                                'files\\icons\\AddedIcon.ico',
+                                'files\\icons\\ConflictIcon.ico',
+                                'files\\icons\\DeletedIcon.ico',
+                                'files\\icons\\DemoCollector.ico',
+                                'files\\icons\\IgnoredIcon.ico',
+                                'files\\icons\\ModifiedIcon.ico',
+                                'files\\icons\\NormalIcon.ico',
+                                'files\\icons\\ReadOnlyIcon.ico']),
+			  ('imageformats', ['imageformats\\qico4.dll'])]
 
 includes = ['sip']
 excludes = ['_gtkagg', '_tkagg', 'bsddb', 'curses', 'email', 'pywin.debugger',

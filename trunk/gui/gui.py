@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'gui.ui'
 #
-# Created: Sun Dec 27 18:35:57 2009
+# Created: Wed Dec 30 23:51:50 2009
 #      by: PyQt4 UI code generator 4.6.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -15,7 +15,7 @@ class Ui_dialog(object):
         dialog.resize(450, 350)
         dialog.setAcceptDrops(False)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("DemoCollector.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/ico/files/icons/DemoCollector.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         dialog.setWindowIcon(icon)
         self.demoCountGroupBox = QtGui.QGroupBox(dialog)
         self.demoCountGroupBox.setGeometry(QtCore.QRect(10, 0, 120, 61))
@@ -45,17 +45,17 @@ class Ui_dialog(object):
         self.collectButton.setFont(font)
         self.collectButton.setObjectName("collectButton")
         self.settingsButton = QtGui.QPushButton(self.mainGroupBox)
-        self.settingsButton.setGeometry(QtCore.QRect(350, 20, 75, 21))
+        self.settingsButton.setGeometry(QtCore.QRect(350, 20, 71, 20))
         self.settingsButton.setObjectName("settingsButton")
         self.progressGroupBox = QtGui.QGroupBox(dialog)
         self.progressGroupBox.setGeometry(QtCore.QRect(140, 0, 301, 61))
         self.progressGroupBox.setObjectName("progressGroupBox")
         self.gamesProgressBar = QtGui.QProgressBar(self.progressGroupBox)
         self.gamesProgressBar.setGeometry(QtCore.QRect(10, 40, 291, 16))
-        self.gamesProgressBar.setProperty("value", 24)
+        self.gamesProgressBar.setProperty("value", 0)
         self.gamesProgressBar.setObjectName("gamesProgressBar")
         self.currentGameLabel = QtGui.QLabel(self.progressGroupBox)
-        self.currentGameLabel.setGeometry(QtCore.QRect(10, 20, 271, 20))
+        self.currentGameLabel.setGeometry(QtCore.QRect(10, 20, 141, 20))
         self.currentGameLabel.setObjectName("currentGameLabel")
 
         self.retranslateUi(dialog)
