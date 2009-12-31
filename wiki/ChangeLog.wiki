@@ -5,3 +5,6 @@
  
 *build-23:*
  * Add: Icon support
+ 
+*build-24:*
+ * Add: Better error handling and printing
