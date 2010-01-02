@@ -25,3 +25,19 @@ games:
 [ExampleSettings Other example settings]
 
 ==[ExtraSetting]==
+
+= Command line =
+U can run the program as a script under Linux and Windows<br/>
+U will need:
+
+ * [http://www.python.org/download/ Python]
+ * [http://pyyaml.org/wiki/PyYAML PyYAML library]
+
+then u just run :
+
+{{{
+python demoCollector.py
+}}}
+
+in the collector directory. <br/>
+Edit the setting in the files dir
