@@ -8,3 +8,7 @@
  
 *build-24:*
  * Add: Better error handling and printing
+ 
+*build-27:*
+ * Add: Refactoring code and gui
+ * Add: Linux and Windows command line support

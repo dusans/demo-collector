@@ -132,5 +132,6 @@ setup(
 # No post-compilation code added
 os.popen('rar a exe\DemoCollector-build-%s.rar exe\DemoCollector-build-%s' % (version, version))
 
+os.popen('rar a linux\DemoCollector-build-%s.rar collector' % version)
+os.popen('rar a linux\DemoCollector-build-%s.rar files' % version)
 # And we are done. That's a setup script :-D
-
