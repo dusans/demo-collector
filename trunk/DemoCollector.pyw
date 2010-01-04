@@ -8,8 +8,6 @@ from collector.demoCollector import *
 class Ui_Dialog(QtGui.QDialog):
 
     def setupUi(self, Dialog):
-        self.settingsFilePath = "files/settings.yml"
-        self.iconFilePath = "files/icons/DemoCollector.ico"
         # ==== ==== ==== ====
         # GUI SETUP
         # ==== ==== ==== ====
@@ -17,7 +15,7 @@ class Ui_Dialog(QtGui.QDialog):
         dialog.resize(519, 350)
         dialog.setAcceptDrops(False)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/ico/files/icons/DemoCollector.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("files/icons/DemoCollector.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         dialog.setWindowIcon(icon)
         self.mainGroupBox = QtGui.QGroupBox(dialog)
         self.mainGroupBox.setGeometry(QtCore.QRect(10, 0, 501, 341))
@@ -59,9 +57,11 @@ class Ui_Dialog(QtGui.QDialog):
         # ==== ==== ==== ====
         # MY DEFAULT
         # ==== ==== ==== ====
-        # bind buttons actions
+        self.settingsFilePath = "files/settings.yml"
+		# bind buttons actions
         self.settingsButton.clicked.connect(self.editSettings)
         self.collectButton.clicked.connect(self.collect)
+
 
         # ==== ICONS ====
         self.icons = {  "OK": "files/icons/NormalIcon.ico","Error": "files/icons/ModifiedIcon.ico",
@@ -89,7 +89,7 @@ class Ui_Dialog(QtGui.QDialog):
             item.setIcon(icon)
             self.outputListWidget.addItem(item)
         else:
-            self.outputListWidget.addItem(message.text)
+            self.outputListWidget.addItem(message)
 
         self.outputListWidget.scrollToBottom()
 
@@ -97,14 +97,16 @@ class Ui_Dialog(QtGui.QDialog):
     # COLLECT
     # ==== ==== ==== ====
     def collect(self):
-        collector = Collector(open(self.settingsFilePath), self)
-        collector.demoCountOutput = self.lcdDemoNumber.display
+        collector = Collector(self.settingsFilePath, self.write, self.lcdDemoNumber.display)
         collector.collect()
 
     # ==== ==== ==== ====
     # EDIT SETTINGS
     # ==== ==== ==== ====
     def editSettings(self):
+        if not os.path.exists("%s/%s" % (os.getcwd(), self.settingsFilePath)):
+            open(self.settingsFilePath, "w").write(open("%s.%s" % (self.settingsFilePath, "example")).read())
+
         try:
             Popen(["notepad", "%s/%s" % (os.getcwd(), self.settingsFilePath)])
         except:

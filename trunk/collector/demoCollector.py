@@ -9,8 +9,8 @@ from yaml.parser import ParserError
 class Demo:
     def __init__(self, path, screenShots=[]):
         self.path = path
-        self.name = ".".join(re.split('\\\\|/', path)[-1].split(".")[:-1])
-        self.ext =  re.split('\\\\|/', path)[-1].split(".")[-1]
+        self.name = os.path.splitext((os.path.basename(path)))[0]
+        self.ext = os.path.splitext((os.path.basename(path)))[1].replace(".", "")
         self.startDate = os.stat(path).st_ctime
         self.endDate = os.stat(path).st_mtime
         self.screenShots = self.getScreenShots(screenShots)
@@ -27,8 +27,8 @@ class Demo:
 class ScreenShot:
     def __init__(self, path):
         self.path = path
-        self.name = ".".join(re.split('\\\\|/', path)[-1].split(".")[:-1])
-        self.ext =  re.split('\\\\|/', path)[-1].split(".")[-1]
+        self.name = os.path.splitext((os.path.basename(path)))[0]
+        self.ext =  os.path.splitext((os.path.basename(path)))[1].replace(".", "")
         self.date = os.stat(path).st_ctime
 
     def __str__(self):
@@ -70,8 +70,11 @@ class Game:
             return False
 
     # TODO put this tests into a Settings class
-    # Test if all folders exist
+
     def test(self):
+        """
+        Test if all folders exist
+        """
         # 1. Test folders...
         for folder in [self.demoFolder, self.screenShotFolder, self.outputFolder]:
             if not os.path.isdir(folder):
@@ -180,8 +183,11 @@ class Message:
     def __str__(self):
         return "[%s]\t%s" % (self.messageType, self.text)
 
-# This is the default output of text and messages for the Collector
 class Output:
+    """
+    This is the default output of text and messages for the Collector
+    Writes to the stout with print
+    """
     def __init__(self):
         pass
     def write(self, message):
@@ -195,23 +201,24 @@ class Settings:
         self.settings = {}
 
         try:
-            self.settings = yaml.load(self.settingsFile)
-            return Message("OK", "YAML Settings loadet successfully")
+            self.settings = yaml.load(open(self.settingsFile))
+            return Message("OK", "Settings loadet successfully")
         except IOError, e:
-            return Message("Error", "Settings file not found! There should be a settings.yml in files directory!")
+            open(self.settingsFile, "w").write(open("%s.%s" % (self.settingsFile, "example")).read())
+            return Message("Error", "Settings file not found! I have created a settings.yml file in files directory. Go edit it or just click Settings button!")
         except ParserError, e:
             return Message("Error", "Settings load ERROR. YAML setting file is corrupt!\n %s" % str(e))
 
 class Collector:
-
     # settingsFile = open file instance
-    def __init__(self, settingsFile, output=Output()):
+    def __init__(self, settingsFile, write=Output().write, lcdDemoNumber = Output().write):
         self.games = []
         # ==== ==== ==== ====
         # OUTPUT connectors
         # ==== ==== ==== ====
-        self.output = output
-        self.demoCountOutput = sys.stdout.write
+        # output should be an object that has a write method that specifies where to print some text :)
+        self.write = write
+        self.lcdDemoNumber = lcdDemoNumber
         # ==== ==== ==== ====
         # LOAD SETTINGS
         # ==== ==== ==== ====
@@ -225,15 +232,8 @@ class Collector:
             try:
                 self.games.append(Game(**setting))
             except:
-                self.write(Message("Error", "Loading game settings ERROR. Check settings file"))
+                self.write(Message("Error", "Loading game settings error. Check settings file"))
                 self.write(Message("Warning", "    error at game: %s" % setting['name']))
-
-    # ==== ==== ==== ====
-    # Write to specified output
-    # ==== ==== ==== ====
-    # output should be an object that has a write method that specifies where to print some text :)
-    def write(self, text):
-        self.output.write(text)
 
     def collect(self):
         allDemosNum = 0
@@ -244,20 +244,19 @@ class Collector:
 
             # ==== Test GAME ====
             if game.test()[0]:
-                self.write(Message("OK", "Loading game: %s ... game is valid" % game.name))
+                self.write(Message("OK", "Loading: %s ... game is valid" % game.name))
 
                 # ==== ==== ==== ====
                 # GET DEMOS
                 # ==== ==== ==== ====
                 for demo in game.copy():
                     self.write(Message("Add", "     copy demo: %s" % demo.name))
-                    # Demo Count LCD
+                    # Demo Count
                     allDemosNum += 1
-                    self.demoCountOutput(str(allDemosNum))
-                    #self.lcdDemoNumber.display(allDemosNum)
+                    self.lcdDemoNumber(allDemosNum)
             else:
-                self.write(Message("Warning", "Loading game: %s ... game is invalid!" % game.name))
-                self.write(Message("Warning", "    error: %s" % game.test()[1]))
+                self.write(Message("Warning", "Loading: %s ... game is invalid!" % game.name))
+                self.write(Message("Warning", "     error: %s" % game.test()[1]))
 
 #-------------------------------------------------------------------------------
 # TEST
@@ -267,12 +266,12 @@ class Collector:
 ##games = [Game(**setting) for setting in settings['games']]
 ##
 ##grouper = settings['games'][0]['grouper'][0]
-####[('root', '.*', [('TDM', '$TDM')])]
-####{'root': '.*', 'childs':{'TDM': '/TDM'}}
-####for d in quakelive.copy():
-####    print d
-####    for p in d.screenShots:
-####            print "\t", p
+##[('root', '.*', [('TDM', '$TDM')])]
+##{'root': '.*', 'childs':{'TDM': '/TDM'}}
+##for d in quakelive.copy():
+##    print d
+##    for p in d.screenShots:
+##            print "\t", p
 ##
 ##def group(grouper, name):
 ##    #print grouper, name
@@ -287,6 +286,5 @@ class Collector:
 # MAIN
 # ==== ==== ==== ====
 if __name__ == '__main__':
-    #s = Settings(open("d:/dev/DemoCollector/code/files/settings.yml"))
-    collector = Collector(open("../files/settings.yml"))
+    collector = Collector("../files/settings.yml")
     collector.collect()

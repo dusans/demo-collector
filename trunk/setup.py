@@ -38,7 +38,7 @@ class Target(object):
 
 #d:\dev\DemoCollector\code\imageformats\
 
-data_files = [('files', ['files\\settings.yml']),
+data_files = [('files', ['files\\settings.yml.example']),
 
 
 			  ('files\\icons', ['files\\icons\\DemoCollector.ico',
@@ -133,5 +133,5 @@ setup(
 os.popen('rar a exe\DemoCollector-build-%s.rar exe\DemoCollector-build-%s' % (version, version))
 
 os.popen('rar a linux\DemoCollector-script-build-%s.rar collector' % version)
-os.popen('rar a linux\DemoCollector-script-build-%s.rar files\settings.yml' % version)
+os.popen('rar a linux\DemoCollector-script-build-%s.rar files\settings.yml.example' % version)
 # And we are done. That's a setup script :-D

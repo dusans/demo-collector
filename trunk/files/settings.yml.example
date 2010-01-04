@@ -1,0 +1,45 @@
+# This is an EXAMPLE settings file
+# Indentation does matter. Use the same amount of spaces ;) just use copy paste ;)
+games:
+ - name: QuakeLive
+   demoFolder: c:/quakelive/home/baseq3/demos2/
+   screenShotFolder: c:/quakelive/home/baseq3/screenshots/
+   outputFolder: d:/DemoCollector/quakelive
+   gameDemoExt: dm_73 
+   
+ - name: Warsow
+   demoFolder: c:\Warsow 0.5\basewsw\demos\autorecord\
+   screenShotFolder: c:\Warsow 0.5\basewsw\screenshots\
+   outputFolder: d:/DemoCollector/Warsow
+   gameDemoExt: wd11
+   
+ - name: QuakeWorld
+   demoFolder: d:\nQuake\qw\demos\
+   screenShotFolder: d:\nQuake\qw\screenshots\
+   outputFolder: d:/DemoCollector/QuakeWorld
+   gameDemoExt: qwd
+   
+ - name: QuakeLiveAdvance
+   demoFolder: c:/quakelive/home/baseq3/demos/
+   screenShotFolder: c:/quakelive/home/baseq3/screenshots/
+   outputFolder: d:/DemoCollector/output
+   gameDemoExt: dm_73
+   # Advance settings example [extra]... dont even bother if u dont feel like
+   #  shorten the output demo name using regular expression...
+   nameShorteners: 
+     remove end date: \-\d{4}_\d{2}_\d{2}\-\d{2}_\d{2}_\d{2}
+     remove clan tag: qpd
+   #  put the demo into subdirectory based on its name... using regular expression
+   grouper:
+    - /:
+        v: .*
+        c:
+          TDM:
+            v: ^TDM
+            c: 
+              xgo:
+                v: xgo
+          CTF:
+            v: ^CTF
+
+
