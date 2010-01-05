@@ -98,6 +98,7 @@ class Ui_Dialog(QtGui.QDialog):
     # ==== ==== ==== ====
     def collect(self):
         collector = Collector(self.settingsFilePath, self.write, self.lcdDemoNumber.display)
+        collector.checkForUpdate("setup/setup-version.txt", "http://demo-collector.googlecode.com/files/setup-version.txt")
         collector.collect()
 
     # ==== ==== ==== ====
