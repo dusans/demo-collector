@@ -40,7 +40,6 @@ class Target(object):
 
 data_files = [('files', ['files\\settings.yml.example']),
 
-
 			  ('files\\icons', ['files\\icons\\DemoCollector.ico',
                                 'files\\icons\\AddedIcon.ico',
                                 'files\\icons\\ConflictIcon.ico',
@@ -50,6 +49,7 @@ data_files = [('files', ['files\\settings.yml.example']),
                                 'files\\icons\\ModifiedIcon.ico',
                                 'files\\icons\\NormalIcon.ico',
                                 'files\\icons\\ReadOnlyIcon.ico']),
+              ('setup', ['setup\\setup-version.txt', 'setup\\changelog.txt']),
 			  ('imageformats', ['imageformats\\qico4.dll'])]
 
 includes = ['sip']
@@ -134,4 +134,5 @@ os.popen('rar a exe\DemoCollector-build-%s.rar exe\DemoCollector-build-%s' % (ve
 
 os.popen('rar a linux\DemoCollector-script-build-%s.rar collector' % version)
 os.popen('rar a linux\DemoCollector-script-build-%s.rar files\settings.yml.example' % version)
+os.popen('rar a linux\DemoCollector-script-build-%s.rar setup\setup-version.txt' % version)
 # And we are done. That's a setup script :-D

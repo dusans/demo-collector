@@ -12,3 +12,11 @@
 *build-33:*
  * Add: Refactoring code and gui
  * Add: Linux and Windows command line support
+ 
+*build-42:*
+ * Fix: Settings file doesnt get replaced when u download new version
+ * Add: Check for update online
+ 
+*build-42:*
+ * Fix: load setting file for the first time
+ * Fix: Command line version: addet setup-version.txt to check update

@@ -5,12 +5,17 @@ import shutil
 import datetime
 import yaml
 from yaml.parser import ParserError
+from urllib import urlopen
 
-class Demo:
-    def __init__(self, path, screenShots=[]):
+class Item:
+    def __init__(self, path):
         self.path = path
         self.name = os.path.splitext((os.path.basename(path)))[0]
         self.ext = os.path.splitext((os.path.basename(path)))[1].replace(".", "")
+
+class Demo(Item):
+    def __init__(self, path, screenShots=[]):
+        Item.__init__(self, path)
         self.startDate = os.stat(path).st_ctime
         self.endDate = os.stat(path).st_mtime
         self.screenShots = self.getScreenShots(screenShots)
@@ -24,11 +29,9 @@ class Demo:
     def __str__(self):
         return "<Demo: name: %s, startDate: %s, endDate: %s>" % (self.name, self.startDate, self.endDate)
 
-class ScreenShot:
+class ScreenShot(Item):
     def __init__(self, path):
-        self.path = path
-        self.name = os.path.splitext((os.path.basename(path)))[0]
-        self.ext =  os.path.splitext((os.path.basename(path)))[1].replace(".", "")
+        Item.__init__(self, path)
         self.date = os.stat(path).st_ctime
 
     def __str__(self):
@@ -112,10 +115,10 @@ class Game:
         for directory in os.walk(directory):
             for f in directory[2]:
                 if f.endswith(ext):
-                    yield "%s/%s" % (directory[0], f)
+                    yield os.path.join(directory[0], f)
 
     def getScreenShots(self):
-        self.screenShots = [ScreenShot("%s/%s" % (self.screenShotFolder, s)) for s in os.listdir(self.screenShotFolder)]
+        self.screenShots = [ScreenShot(os.path.join(self.screenShotFolder, s)) for s in os.listdir(self.screenShotFolder)]
 
     def getDemos(self):
         demos = [Demo(f, self.screenShots) for f in self.getFiles(self.demoFolder, self.gameDemoExt)]
@@ -205,9 +208,10 @@ class Settings:
             return Message("OK", "Settings loadet successfully")
         except IOError, e:
             open(self.settingsFile, "w").write(open("%s.%s" % (self.settingsFile, "example")).read())
-            return Message("Error", "Settings file not found! I have created a settings.yml file in files directory. Go edit it or just click Settings button!")
+            return Message("Error", "Settings file not found! I have created a settings.yml file in files directory. \nGo edit it or just click Settings button!")
         except ParserError, e:
             return Message("Error", "Settings load ERROR. YAML setting file is corrupt!\n %s" % str(e))
+
 
 class Collector:
     # settingsFile = open file instance
@@ -228,12 +232,28 @@ class Collector:
         # ==== ==== ==== ====
         # LOAD GAMES
         # ==== ==== ==== ====
-        for setting in self.settingsObject.settings['games']:
+        for setting in self.settingsObject.settings.get('games', []):
             try:
                 self.games.append(Game(**setting))
             except:
                 self.write(Message("Error", "Loading game settings error. Check settings file"))
                 self.write(Message("Warning", "    error at game: %s" % setting['name']))
+
+    def checkForUpdate(self, setup_version, setup_version_url):
+        try:
+            currentVersion = open(setup_version).read()
+            onlineVersion = urlopen(setup_version_url).read()
+
+            if int(currentVersion) == int(onlineVersion):
+                self.write(Message("OK", "Your version is up to date :)"))
+            elif int(currentVersion) > int(onlineVersion):
+                self.write(Message("OK", "Your version is super up to date :)"))
+            else:
+                self.write(Message("Add", "There is a new version online. Download it at:"))
+                self.write("        http://code.google.com/p/demo-collector/")
+        except Exception, e:
+            self.write(Message("Error", "Update check error!"))
+            self.write(Message("Error", str(e)))
 
     def collect(self):
         allDemosNum = 0
@@ -287,4 +307,5 @@ class Collector:
 # ==== ==== ==== ====
 if __name__ == '__main__':
     collector = Collector("../files/settings.yml")
+    collector.checkForUpdate("../setup/setup-version.txt", "http://demo-collector.googlecode.com/files/setup-version.txt")
     collector.collect()
