@@ -27,7 +27,7 @@ games:
 ==[ExtraSetting]==
 
 = Command line =
-U can run the program as a script under Linux and Windows<br/>
+U can run the program as a script under Linux, Windows and Mac<br/>
 Just download the *DemoCollector-script-build-XX.rar** and unpack it <br/>
 U will need:
 
